@@ -67,12 +67,8 @@ class Sudoku:
     def column_values(self, i: int) -> Iterable[int]:
         """Returns all values at i-th column.
         CHANGED """
-        values = []
-
-        for row in self._grid:
-            values.append(row[i])
-
-        return values
+        
+        return [row[i] for row in self._grid]
 
     def block_values(self, i: int) -> Iterable[int]:
         """
