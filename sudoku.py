@@ -6,50 +6,23 @@ class Sudoku:
     """A mutable sudoku puzzle."""
 
     def __init__(self, puzzle: Iterable[Iterable]):
-        self._grid: list[str] = []
-
-        for puzzle_row in puzzle:
-            row = ""
-
-            for element in puzzle_row:
-                row += str(element)
-
-            self._grid.append(row)
+        self._grid: list[list] = [list(map(int, row)) for row in puzzle]
 
     def place(self, value: int, x: int, y: int) -> None:
-        """Place value at x,y."""
-        row = self._grid[y]
-        new_row = ""
-
-        for i in range(9):
-            if i == x:
-                new_row += str(value)
-            else:
-                new_row += row[i]
-
-        self._grid[y] = new_row
+        """Place value at x,y. CHANGED"""
+        self._grid[y][x] = value
 
     def unplace(self, x: int, y: int) -> None:
         """Remove (unplace) a number at x,y."""
-        row = self._grid[y]
-        new_row = row[:x] + "0" + row[x + 1:]
-        self._grid[y] = new_row
+        self._grid[y][x] = 0
 
     def value_at(self, x: int, y: int) -> int:
-        """Returns the value at x,y."""
-        value = -1
-
-        for i in range(9):
-            for j in range(9):
-                if i == x and j == y:
-                    row = self._grid[y]
-                    value = int(row[x])
-
-        return value
+        """Returns the value at x,y. CHANGED"""
+        return self._grid[y][x]
 
     def options_at(self, x: int, y: int) -> Iterable[int]:
         """Returns all possible values (options) at x,y."""
-        options = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        options = {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
         # Remove all values from the row
         for value in self.row_values(y):
@@ -75,31 +48,29 @@ class Sudoku:
         """
         Returns the next index (x,y) that is empty (value 0).
         If there is no empty spot, returns (-1,-1)
+        CHANGED
         """
-        next_x, next_y = -1, -1
-
         for y in range(9):
-            for x in range(9):
-                if self.value_at(x, y) == 0 and next_x == -1 and next_y == -1:
-                    next_x, next_y = x, y
+            row = self._grid[y]
 
-        return next_x, next_y
+            if 0 in row:
+                return row.index(0), y
+
+        return -1, -1
 
     def row_values(self, i: int) -> Iterable[int]:
-        """Returns all values at i-th row."""
-        values = []
+        """Returns all values at i-th row.
+            CHANGED"""
 
-        for j in range(9):
-            values.append(self.value_at(j, i))
-
-        return values
+        return self._grid[i]
 
     def column_values(self, i: int) -> Iterable[int]:
-        """Returns all values at i-th column."""
+        """Returns all values at i-th column.
+        CHANGED """
         values = []
 
-        for j in range(9):
-            values.append(self.value_at(i, j))
+        for row in self._grid:
+            values.append(row[i])
 
         return values
 
@@ -110,44 +81,47 @@ class Sudoku:
         0 1 2
         3 4 5
         6 7 8
+
+        CHANGED
         """
         values = []
 
         x_start = (i % 3) * 3
         y_start = (i // 3) * 3
 
-        for x in range(x_start, x_start + 3):
-            for y in range(y_start, y_start + 3):
-                values.append(self.value_at(x, y))
+        for y in range(y_start, y_start + 3):
+            row = self._grid[y]
+            values.extend(row[x_start:x_start+3])
 
         return values
 
     def is_solved(self) -> bool:
         """
         Returns True if and only if all rows, columns and blocks contain
-        only the numbers 1 through 9. False otherwise.
+        only the numbers 1 through 9. False otherwise. CHANGED
         """
         values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-
-        result = True
 
         for i in range(9):
             for value in values:
                 if value not in self.column_values(i):
-                    result = False
+                    return False
 
                 if value not in self.row_values(i):
-                    result = False
+                    return False
 
                 if value not in self.block_values(i):
-                    result = False
-
-        return result
+                    return False
+        
+        return True
 
     def __str__(self) -> str:
         representation = ""
 
-        for row in self._grid:
+        grid = self._grid.copy()
+
+        for row in grid:
+            row = "".join(map(str, row))
             representation += row + "\n"
 
         return representation.strip()
@@ -158,11 +132,6 @@ def load_from_file(filename: str) -> Sudoku:
     puzzle: list[str] = []
 
     with open(filename) as f:
-        for line in f:
-
-            # strip newline and remove all commas
-            line = line.strip().replace(",", "")
-
-            puzzle.append(line)
+        puzzle = [line.strip().replace(",", "") for line in f]
 
     return Sudoku(puzzle)
