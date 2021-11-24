@@ -108,9 +108,7 @@ class Sudoku:
     def __str__(self) -> str:
         representation = ""
 
-        grid = self._grid.copy()
-
-        for row in grid:
+        for row in self._grid:
             row = "".join(map(str, row))
             representation += row + "\n"
 
