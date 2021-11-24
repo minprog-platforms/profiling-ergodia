@@ -9,7 +9,7 @@ class Sudoku:
         self._grid: list[list] = [list(map(int, row)) for row in puzzle]
 
     def place(self, value: int, x: int, y: int) -> None:
-        """Place value at x,y. CHANGED"""
+        """Place value at x,y."""
         self._grid[y][x] = value
 
     def unplace(self, x: int, y: int) -> None:
@@ -17,7 +17,7 @@ class Sudoku:
         self._grid[y][x] = 0
 
     def value_at(self, x: int, y: int) -> int:
-        """Returns the value at x,y. CHANGED"""
+        """Returns the value at x,y."""
         return self._grid[y][x]
 
     def options_at(self, x: int, y: int) -> Iterable[int]:
@@ -48,7 +48,6 @@ class Sudoku:
         """
         Returns the next index (x,y) that is empty (value 0).
         If there is no empty spot, returns (-1,-1)
-        CHANGED
         """
         for y in range(9):
             row = self._grid[y]
@@ -59,14 +58,11 @@ class Sudoku:
         return -1, -1
 
     def row_values(self, i: int) -> Iterable[int]:
-        """Returns all values at i-th row.
-            CHANGED"""
-
+        """Returns all values at i-th row."""
         return self._grid[i]
 
     def column_values(self, i: int) -> Iterable[int]:
-        """Returns all values at i-th column.
-        CHANGED """
+        """Returns all values at i-th column."""
         
         return [row[i] for row in self._grid]
 
@@ -77,8 +73,6 @@ class Sudoku:
         0 1 2
         3 4 5
         6 7 8
-
-        CHANGED
         """
         values = []
 
@@ -94,7 +88,7 @@ class Sudoku:
     def is_solved(self) -> bool:
         """
         Returns True if and only if all rows, columns and blocks contain
-        only the numbers 1 through 9. False otherwise. CHANGED
+        only the numbers 1 through 9. False otherwise.
         """
         values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
