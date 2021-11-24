@@ -17,7 +17,7 @@ class Sudoku:
         self._grid[y][x] = 0
 
     def value_at(self, x: int, y: int) -> int:
-        """Returns the value at x,y."""
+        """Returns the value at x,y. Won't be used anymore"""
         return self._grid[y][x]
 
     def options_at(self, x: int, y: int) -> Iterable[int]:
@@ -90,7 +90,7 @@ class Sudoku:
         Returns True if and only if all rows, columns and blocks contain
         only the numbers 1 through 9. False otherwise.
         """
-        values = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        values = {1, 2, 3, 4, 5, 6, 7, 8, 9}
 
         for i in range(9):
             for value in values:
