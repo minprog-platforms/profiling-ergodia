@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Iterable, Sequence
+from typing import Iterable
 
 
 class Sudoku:
@@ -63,7 +63,7 @@ class Sudoku:
 
     def column_values(self, i: int) -> Iterable[int]:
         """Returns all values at i-th column."""
-        
+
         return [row[i] for row in self._grid]
 
     def block_values(self, i: int) -> Iterable[int]:
@@ -102,15 +102,15 @@ class Sudoku:
 
                 if value not in self.block_values(i):
                     return False
-        
+
         return True
 
     def __str__(self) -> str:
         representation = ""
 
         for row in self._grid:
-            row = "".join(map(str, row))
-            representation += row + "\n"
+            string_row = "".join(map(str, row))
+            representation += string_row + "\n"
 
         return representation.strip()
 
